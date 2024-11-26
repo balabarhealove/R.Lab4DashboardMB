@@ -1,55 +1,58 @@
-import * as React from 'react';
+import React, { useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
 
-// Importing screens and components
+// Import screens
 import HomeScreen from '../screens/HomeScreen';
 import SettingsScreen from '../screens/SettingsScreen';
-import Login from '../components/Login'; // Assuming you are using Login component in the drawer
-import Register from '../components/Register'; // Updated to match the new file name
-import PasswordRecovery from '../components/PasswordRecovery'; // For Password Recovery
+import Login from '../components/Login';
+import Register from '../components/Register';
+import PasswordRecovery from '../components/PasswordRecovery';
 
-
-// Creating navigators
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-// Tab Navigator (for Home and Settings)
+// Tab Navigator for Home and Settings
 function HomeTab() {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Home Screen" component={HomeScreen} />
       <Tab.Screen name="Settings" component={SettingsScreen} />
     </Tab.Navigator>
   );
 }
 
-// Stack Navigator (to manage screen transitions)
-function AppStack() {
+// Auth Stack Navigator
+function AuthStack({ setIsLoggedIn }) {
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="Home" component={HomeTab} />
-      <Stack.Screen name="Login" component={Login} />
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      {/* Pass setIsLoggedIn as a prop to Login */}
+      <Stack.Screen name="Login">
+        {(props) => <Login {...props} setIsLoggedIn={setIsLoggedIn} />}
+      </Stack.Screen>
       <Stack.Screen name="Register" component={Register} />
-      <Stack.Screen name="Password Recovery" component={PasswordRecovery} />
+      <Stack.Screen name="PasswordRecovery" component={PasswordRecovery} />
     </Stack.Navigator>
   );
 }
 
-// Drawer Navigator (which includes the AppStack and other screens)
+// Main Drawer Navigator
 export default function Navigation() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   return (
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Home">
-        <Drawer.Screen name="Home" component={AppStack} />
-        <Drawer.Screen name="Settings" component={SettingsScreen} />
-        <Drawer.Screen name="Login" component={Login} />
-        <Drawer.Screen name="Register" component={Register} />
-        <Drawer.Screen name="Password Recovery" component={PasswordRecovery} />
-      </Drawer.Navigator>
+      {isLoggedIn ? (
+        <Drawer.Navigator>
+          <Drawer.Screen name="Home" component={HomeTab} />
+          <Drawer.Screen name="Settings" component={SettingsScreen} />
+        </Drawer.Navigator>
+      ) : (
+        <AuthStack setIsLoggedIn={setIsLoggedIn} />
+      )}
     </NavigationContainer>
   );
 }

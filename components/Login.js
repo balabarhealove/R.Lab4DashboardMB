@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Text, TextInput, Button } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/FontAwesome'; // Import FontAwesome icons
 
-const Login = ({ navigation }) => {
-  const [email, setEmail] = useState(''); // Email state
-  const [password, setPassword] = useState(''); // Password state
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Login state
+const Login = ({ navigation, setIsLoggedIn }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleLogin = () => {
-    // Simple login check (just an example, you can add validation here)
-    if (email === 'user@example.com' && password === 'password123') {
-      setIsLoggedIn(true); // Set the login state to true after successful login
+    // Example authentication logic
+    if (email === 'Rhea@yahoo.com' && password === 'password123') {
+      setIsLoggedIn(true); // Update global login state
+      navigation.navigate('Home'); // Navigate to Home screen
     } else {
-      alert('Invalid credentials!'); // Alert for invalid credentials
+      alert('Invalid credentials!');
     }
   };
 
@@ -26,8 +25,7 @@ const Login = ({ navigation }) => {
         label="Email"
         mode="outlined"
         value={email}
-        onChangeText={(text) => setEmail(text)} // Update email state
-        left={<TextInput.Icon name="email" />}
+        onChangeText={(text) => setEmail(text)}
         style={styles.input}
       />
       <TextInput
@@ -35,21 +33,13 @@ const Login = ({ navigation }) => {
         mode="outlined"
         secureTextEntry
         value={password}
-        onChangeText={(text) => setPassword(text)} // Update password state
-        left={<TextInput.Icon name="lock" />}
+        onChangeText={(text) => setPassword(text)}
         style={styles.input}
       />
 
-      {/* Conditional rendering based on login state */}
-      {isLoggedIn ? (
-        <View>
-          <Text style={styles.welcomeMessage}>Welcome! You are logged in.</Text>
-          <Icon name="check-circle" size={30} color="green" /> {/* Icon displayed after login */}
-        </View>
-      ) : (
-        <Button mode="contained" style={styles.button} onPress={handleLogin}>Login</Button>
-      )}
-
+      <Button mode="contained" style={styles.button} onPress={handleLogin}>
+        Login
+      </Button>
       <Button onPress={() => navigation.navigate('Register')} style={styles.link}>
         Register
       </Button>
@@ -88,12 +78,6 @@ const styles = StyleSheet.create({
   },
   link: {
     marginTop: 10,
-  },
-  welcomeMessage: {
-    color: 'green',
-    textAlign: 'center',
-    fontSize: 18,
-    marginVertical: 10,
   },
 });
 

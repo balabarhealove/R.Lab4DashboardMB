@@ -1,11 +1,11 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image, Button, Switch } from 'react-native';
+import { StyleSheet, View, Text, Image, TouchableOpacity, Switch } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default function App() {
   const [isDarkMode, setIsDarkMode] = React.useState(false);
 
-  const toggleSwitch = () => setIsDarkMode(previousState => !previousState);
+  const toggleSwitch = () => setIsDarkMode((previousState) => !previousState);
 
   return (
     <View style={isDarkMode ? styles.containerDark : styles.containerLight}>
@@ -43,7 +43,13 @@ export default function App() {
           <Switch onValueChange={toggleSwitch} value={isDarkMode} />
         </View>
 
-        <Button title="Sign Out" onPress={() => alert('Signing out...')} color="#CFA69D" />
+        {/* Custom Button for Sign Out */}
+        <TouchableOpacity
+          style={styles.signOutButton}
+          onPress={() => alert('Signing out...')}
+        >
+          <Text style={styles.signOutText}>Sign Out</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -125,5 +131,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
+  },
+  signOutButton: {
+    marginTop: 20,
+    backgroundColor: '#CFA69D',
+    padding: 15,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  signOutText: {
+    color: '#FFF',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 });
